@@ -26,25 +26,26 @@ const router = express.Router();
 // module.exports = router;
 
  
-
 router.get('/', async (req, res) => {
     try {
+        // Prevent caching to ensure fresh data
+        res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+        
         // Extracting query parameters from the request
         const { search = 'latest', category, country, page = 1, limit = 10 } = req.query;
 
         // GNews API Key (hardcoded for now, replace with env variables in production)
         const apiKey = '8f5ca964667c9ed0e675bf6fc344e727';
-        // const apiKey = 'b69675ce6b57e8471fa098a8cca9dcd5';
         
         // Constructing the parameters for the API request
         const params = {
             q: search,
             token: apiKey, 
             lang: 'en',
-            page,                      // Which page to request
-            max: limit,                 // Max number of articles per page
-            topic: category || undefined,  // Optional topic/category filter
-            country: country || undefined, // Optional country filter
+            page,                    
+            max: limit,              
+            topic: category || undefined,  
+            country: country || undefined, 
         };
 
         // Log the request URL and params for debugging purposes
@@ -66,9 +67,15 @@ router.get('/', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error fetching news:', error.message);
-        res.status(500).json({ message: 'Error fetching news', error });
+        if (error.response && error.response.status === 429) {
+            console.error('Rate limit exceeded');
+            res.status(429).json({ message: 'Rate limit exceeded, please try again later' });
+        } else {
+            console.error('Error fetching news:', error.message);
+            res.status(500).json({ message: 'Error fetching news', error });
+        }
     }
+    
 });
 
 module.exports = router;
