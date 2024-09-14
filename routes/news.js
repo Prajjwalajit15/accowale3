@@ -1,3 +1,4 @@
+ 
 const axios = require('axios');
 const express = require('express');
 const router = express.Router();
@@ -35,7 +36,8 @@ router.get('/', async (req, res) => {
         const { search = 'latest', category, country, page = 1, limit = 10 } = req.query;
 
         // GNews API Key (hardcoded for now, replace with env variables in production)
-        const apiKey = '8f5ca964667c9ed0e675bf6fc344e727';
+        const apiKey = '8f5ca964667c9ed0e675bf6fc344e727'; 
+
         
         // Constructing the parameters for the API request
         const params = {
@@ -52,7 +54,7 @@ router.get('/', async (req, res) => {
         console.log('GNews API Params:', params);
 
         // Send the request to the GNews API
-        const response = await axios.get('https://gnews.io/api/v4/search', { params });
+        const response = await axios.get('https://gnews.io/api/v4/search', { params ,timeout: 5000  });
 
         // Get total articles count and calculate total pages
         const totalArticles = response.data.totalArticles;
