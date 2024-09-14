@@ -36,7 +36,9 @@ router.get('/', async (req, res) => {
         const { search = 'latest', category, country, page = 1, limit = 10 } = req.query;
 
         // GNews API Key (hardcoded for now, replace with env variables in production)
-        const apiKey = '8f5ca964667c9ed0e675bf6fc344e727'; 
+        // const apiKey = 'b69675ce6b57e8471fa098a8cca9dcd5'; 
+        // const apiKey = '8f5ca964667c9ed0e675bf6fc344e727'; 
+        const apiKey = '74c6b5109afe8e73ecdbcbbdbd6819e4'; 
 
         
         // Constructing the parameters for the API request
